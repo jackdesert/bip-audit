@@ -1,0 +1,33 @@
+.audit-filter__options
+{
+  position: absolute;
+  top: 0;
+  left: 110%;
+  display: none;
+  border: 1px solid grey;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  background: white;
+}
+
+.audit-filter__options-title
+{
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.audit-filter__label
+{
+  position: relative;
+}
+
+.audit__em-tag-holder em
+{
+  background: yellow;
+  font-weight: bold;
+}
+
+.audit-filter__hint
+{
+  color: grey;
+  display: inline;
+}

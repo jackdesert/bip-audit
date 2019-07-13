@@ -1,0 +1,191 @@
+:ruby
+  def no_spaces(text)
+    text = strip_tags(text)
+    text.gsub(' ', '&nbsp').html_safe
+  end
+
+  def only_em_tags(text)
+    sanitize(text)
+  end
+
+= wide_as_possible_style
+= show_overflow_style
+.row
+
+  .col-sm-6.nopadding
+    Audit for
+    = link_to resident.full_name, person_path(resident)
+    .space-1rem
+    .audit-filter__label
+      Body
+      .audit-filter__hint (Text Search)
+    = text_field_tag :blobs, blobs, class: 'form-control-2'
+
+    .audit-filter__label
+      Field Names
+      = render 'available_options', stats: stats, klass: :field_names
+    = text_field_tag :field_names, field_names, class: 'form-control audit-filter__has-options '
+
+    /.audit-filter__label Start
+    /= text_field_tag :start_timestamp, start_timestamp, class: 'form-control'
+    /
+    /.audit-filter__label End
+    /= text_field_tag :end_timestamp, end_timestamp, class: 'form-control'
+
+    .audit-filter__label
+      Type
+      = render 'available_options', stats: stats, klass: :type
+    = text_field_tag :type, type, class: 'form-control audit-filter__has-options'
+
+    .audit-filter__label
+      Subtype
+      = render 'available_options', stats: stats, klass: :subtype
+    = text_field_tag :subtype, subtype, class: 'form-control audit-filter__has-options'
+
+    .space-05rem
+    .audit-filter__label
+      = check_box_tag :verbose, verbose, verbose.present?
+      = label_tag :verbose
+
+    = results.count
+    matching documents
+
+    .show-me= button_tag 'Filter', type: :button, id: :show
+
+    %table.table-standard
+      %tr.table-standard__tr
+        %th.table-standard__th Num
+        %th.table-standard__th Timestamp
+        %th.table-standard__th Type
+        %th.table-standard__th SubType
+        %th.table-standard__th Link
+        %th.table-standard__th Entered By
+        - if blobs
+          %th.table-standard__th{style: 'min-width: 30rem'} Body Matches
+        - if verbose
+          %th.table-standard__th People
+          %th.table-standard__th Field Names
+          %th.table-standard__th{style: 'min-width: 30rem'} Body
+        - else
+          %th.table-standard__th Num People
+
+      - results.each_with_index do |res, index|
+        - klass = index.even? ? 'table-standard__tr_stripe' : ''
+        %tr.table-standard__tr{class: klass}
+          %td.table-standard__td= index + 1
+          %td.table-standard__td= no_spaces(standard_datetime(Time.parse(res.timestamp)))
+          %td.table-standard__td= res.type
+          %td.table-standard__td= res.subtype
+          %td.table-standard__td= link_to 'View', res.link
+          %td.table-standard__td
+            - if res.created_by_id
+              = link_to no_spaces(res.created_by_name.to_s[0..11]), staff_path(res.created_by_id)
+          - if blobs
+            %td.table-standard__td.audit__em-tag-holder
+              - res.blob_highlights.each do |h|
+                %div= only_em_tags(h)
+          - if verbose
+            %td.table-standard__td
+              - res.person_ids.each do |person_id|
+                %div= link_to no_spaces(names_hash[person_id].to_s[0..11]), person_path(person_id)
+            %td.table-standard__td
+              - res.field_names.each do |field_name|
+                %div= field_name
+            %td.table-standard__td
+              - res.blobs.each do |blob|
+                %div= blob
+          - else
+            %td.table-standard__td
+              = res.person_ids.count
+
+
+
+
+
+
+:javascript
+  var blobs = function(){
+    return $('#blobs').val()
+  }
+
+  var fieldNames = function(){
+    return $('#field_names').val()
+  }
+
+  var startTimestamp = function(){
+    return $('#start_timestamp').val()
+  }
+
+  var endTimestamp = function(){
+    return $('#end_timestamp').val()
+  }
+
+  var type = function(){
+    return $('#type').val()
+  }
+
+  var subtype = function(){
+    return $('#subtype').val()
+  }
+
+  var verbose = function(){
+    if ($('#verbose').prop('checked')){
+      return 1
+    }
+
+    return false
+  }
+
+  var params = function(){
+    var values = []
+
+    if (type()){
+      values.push('type=' + type())
+    }
+
+    if (subtype()){
+      values.push('subtype=' + subtype())
+    }
+
+    if (blobs()){
+      values.push('blobs=' + blobs())
+    }
+    if (fieldNames()){
+      values.push('field_names=' + fieldNames())
+    }
+
+    if (startTimestamp()){
+      values.push('start_timestamp=' + startTimestamp())
+    }
+
+    if (endTimestamp()){
+      values.push('end_timestamp=' + endTimestamp())
+    }
+
+    if (verbose()){
+      values.push('verbose=' + verbose())
+    }
+
+
+    if (values.length === 0){
+      return('')
+    }else{
+      return('?' + values.join('&'))
+    }
+  }
+
+  var redirect = function(){
+    window.location = '/audit' + params()
+  }
+
+  // Call this as soon as DOM is ready
+  $(document).ready(function(){
+    $('#show').click(redirect)
+    bindAuditFilters()
+  })
+
+
+
+
+
+

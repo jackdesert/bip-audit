@@ -1,0 +1,7 @@
+.audit-filter__options{class: klass}
+  .audit-filter__options-title= klass.to_s.gsub('_', ' ').titleize
+  - stats[klass.to_s].sort_by{|i, c| i}.each do |item, count|
+    .audit-filter__option
+      = check_box_tag item, nil
+      = label_tag item, "#{item} (#{count})"
+
