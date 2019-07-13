@@ -1,8 +1,0 @@
-# Set SYSTEMD_RAILS_ENV to either staging or production
-# so systemd will start rails with the appropriate environment.
-# See unit files in config/*.service
-# 
-# Note that according to User and Group directives cannot be set through environment.
-# Source: http://stackoverflow.com/questions/40130760/systemd-user-and-group-in-environmentfile
-
-SYSTEMD_RAILS_ENV=production
