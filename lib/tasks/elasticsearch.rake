@@ -7,7 +7,14 @@ namespace :elasticsearch do
     #person = Person.find('eb01b16f-63b4-49d2-bfb9-b18f9c44af04') # 25 form responses
     #person = Person.find('d9ef29ea-8987-4382-8abe-fa7f66507a1f') # 6 alerts
     person = Person.find(Search::TARGET_PERSON_ID)
+
     names_hash = Person.names_hash_for_people
+    # names hash has the format:
+    # { <person_1_id> => <full_name>,
+    # { <person_2_id> => <full_name>,
+    #   ...
+    # }
+
     count = 0
 
     lists = [
