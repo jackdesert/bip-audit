@@ -28,30 +28,5 @@
   "devel"     : true,
   "browser"   : true,
 
-
-  // Globals
-  "globals" : {
-                "HandlebarsTemplates": false,
-                "alertEngineersAndContinue": false,
-                "alertEngineersAndHalt": false,
-                "buildRoleNamesList": false,
-                "dbDateToMonthFirst": false,
-                "getCookieValue": false,
-                "getLocalizedStringsFromDiv": false,
-                "handleAjaxError": false,
-                "hashToArray": false,
-                "hideToastMessage": false,
-                "initRoleSelectorButton": false,
-                "loadRoleDefinitions": false,
-                "localIpDataAsync": false,
-                "monthFirstDateToDb": false,
-                "populateLocalizedStringsToDiv": false,
-                "showToastMessage" : false,
-                "showToastMessageWithDelay": false,
-                "story" : false
-              }
-
-
-
 }
 

@@ -1,8 +1,8 @@
-BIP Audit (Code Sample)
-=======================
+BIP Searchable Audit (Code Sample)
+==================================
 
-This repository comprises all the pieces that were added to BIPWeb
-in order to provide an audit of one particular resident.
+This repository comprises all the pieces that were added to BIP
+in order to provide a searchable audit of one particular resident.
 
 Audit in this sense meaning a searchable list of all the records we have
 stored for that resident.
@@ -45,11 +45,20 @@ so no new records are being added at this time. Therefor, a rake task to
 populate ElasticSearch suffices.
 
 
+Files of Interest
+-----------------
 
+    lib/tasks/elasticsearch.rake         # Rake task for loading data
+    app/models/concerns/searchable.rb    # Used by rake task
 
+    app/controllers/audit_controller.rb  # Controller
 
+    app/models/concerns/search.rb        # Search is Instantiated from controller
+    app/models/concerns/search_result.rb # Search returns an array of SearchResult objects
+    app/models/concerns/search_stats.rb  # Tells how many hits of each type
 
+    test/models/concerns/search_test.rb  # Test for Search object
 
-
+    app/views/audit/index.haml           # View
 
 
