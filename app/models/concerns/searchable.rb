@@ -149,7 +149,8 @@ class Searchable
 
     # Note no "!" on the end of try, because we want it to be called for strings,
     # but not for integers
-    output.try(:downcase)
+    output.try(:downcase!)
+    output
   end
 
   def link

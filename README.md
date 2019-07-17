@@ -62,3 +62,18 @@ Files of Interest
     app/views/audit/index.haml           # View
 
 
+
+ElasticSearch in Production
+---------------------------
+
+Elasticsearch runs on JVM, and uses about 1.5G of RAM (not doing anything).
+It's recommended that you run it on a different box.
+
+For production environments, make sure you specify ELASTICSEARCH_URL in your .env file.
+
+    ELASTICSEARCH_URL=https://elasticsearch.elitecare.com
+
+
+(If not specified, it defaults to localhost:9200
+
+Also, make sure you're running elasticsearch 7.0 (6.5 did not work)

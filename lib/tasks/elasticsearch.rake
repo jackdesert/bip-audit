@@ -9,11 +9,12 @@ namespace :elasticsearch do
     person = Person.find(Search::TARGET_PERSON_ID)
 
     names_hash = Person.names_hash_for_people
-    # names hash has the format:
+    # names hash has this format:
     # { <person_1_id> => <full_name>,
     # { <person_2_id> => <full_name>,
     #   ...
     # }
+
 
     count = 0
 
@@ -34,8 +35,11 @@ namespace :elasticsearch do
 
     lists.each do |objects|
 
-      noun = objects.first.class.to_s.pluralize
-      puts("Indexing #{objects.count} #{noun}")
+      # This gets the klass even if objects is empty
+      # (Except in the case of Excursion::Comments)
+      klass = objects.first.try!(:class) || objects.try(:class_name)
+
+      puts("Indexing #{objects.count} #{klass}")
 
       objects.each do |obj|
         s = Searchable.new(obj, names_hash)
@@ -43,7 +47,7 @@ namespace :elasticsearch do
         count += 1
       end
 
-      puts "Done with #{noun}"
+      puts "Done with #{klass}"
     end
 
     [:location_changes, :orientation_changes, :thank_yous].each do |skipped|
